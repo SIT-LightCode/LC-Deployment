@@ -13,5 +13,7 @@ services:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:test
     restart: on-failure
+    ports:
+      - 8080:8080
     # depends_on:
     #   - db
