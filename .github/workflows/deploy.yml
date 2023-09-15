@@ -4,7 +4,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: lc
     steps:
     - uses: actions/checkout@v2
     - name: Login to GHCR
@@ -13,6 +13,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+    - run:  docker-compose down
     - run:  docker image prune -af
     - run:  docker-compose pull
     - run:  docker-compose up -d
