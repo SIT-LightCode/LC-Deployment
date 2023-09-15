@@ -13,5 +13,5 @@ services:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:test
     restart: on-failure
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
