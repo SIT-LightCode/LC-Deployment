@@ -10,7 +10,7 @@ jobs:
     - name: executing remote ssh commands
       run: | 
         sshpass -p ${{ secrets.PROD_PWD }} ssh ${{secrets.PROD_ADMIN}}@${{secrets.PROD_HOSTNAME}}
-        cd LC-Deployment
+        cd ~/LC-Deployment
         docker-compose down
         git pull
         docker-compose up -d
