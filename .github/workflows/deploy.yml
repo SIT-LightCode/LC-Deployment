@@ -7,13 +7,13 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
-    - name: executing remote ssh commands
-      run: | 
-        sshpass -p ${{ secrets.PROD_PWD }} ssh ${{secrets.PROD_ADMIN}}@${{secrets.PROD_HOSTNAME}}
-        cd LC-Deployment
-        docker-compose down
-        git pull
-        docker-compose up -d
+    - uses: alex-ac/github-action-ssh-docker-compose@master
+      name: Docker-Compose Remote Deployment
+      with:
+        ssh_host: ${{ secrets.PROD_HOSTNAME }}
+        ssh_private_key: ${{ secrets.RUNNER_KEY }}
+        ssh_user: ${{ secrets.PROD_ADMIN }}
+        docker_compose_prefix: "~/LC-Deployment"
     - name: run hostname
       run: hostname
     #     docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
