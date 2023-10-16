@@ -10,12 +10,13 @@ jobs:
     - name: executing remote ssh commands
       run: | 
         sshpass -p ${{ secrets.PROD_PWD }} ssh ${{secrets.PROD_ADMIN}}@${{secrets.PROD_HOSTNAME}}
+        ls
+        whoami
         cd ~/LC-Deployment
         docker-compose down
         git pull
         docker-compose up -d
-        ls
-        whoami
+
     - name: run hostname
       run: hostname
     #     docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
