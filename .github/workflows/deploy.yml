@@ -9,7 +9,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: SSH into the Server and Run docker-compose
       run: |
-        sshpass -p ${{ secrets.PROD_PWD }} ssh -tt -o StrictHostKeyChecking=no ${{ secrets.PROD_HOSTNAME }} << EOF
+        sshpass -p lc12345 ssh -tt -o StrictHostKeyChecking=no sysadmin@cp23us1.sit.kmutt.ac.th << EOF
           cd ~/LC-Deployment
           docker-compose up -d
           exit
