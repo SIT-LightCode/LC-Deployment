@@ -8,6 +8,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: SSH into the Server and Run docker-compose
+      env:
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
       run: |
         sshpass -p "${{ secrets.PROD_PWD }}" ssh -tt -o StrictHostKeyChecking=no ${{ secrets.PROD_ADMIN }}@${{ secrets.PROD_HOSTNAME }} << EOF
           cd ~/LC-Deployment

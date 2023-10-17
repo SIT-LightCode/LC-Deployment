@@ -8,7 +8,7 @@ services:
       - "./data:/var/lib/mysql"
       - "./script:/docker-entrypoint-initdb.d"
     environment:
-      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   back:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:test
