@@ -11,6 +11,7 @@ jobs:
       run: |
         sshpass -p "${{ secrets.PROD_PWD }}" ssh -tt -o StrictHostKeyChecking=no ${{ secrets.PROD_ADMIN }}@${{ secrets.PROD_HOSTNAME }} << EOF
           cd ~/LC-Deployment
+          docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
           docker-compose pull
           docker-compose up -d
           exit
