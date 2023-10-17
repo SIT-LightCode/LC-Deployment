@@ -7,25 +7,13 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
-    - name: Run sshpass commands
-      uses: matheusvanzan/sshpass-action@v2
-      with:
-        host: ${{ secrets.PROD_HOSTNAME }}
-        port: 22
-        user: ${{ secrets.PROD_ADMIN }}
-        pass: ${{ secrets.PROD_PWD }}
-        run: |
-          docker-compose pull
-          docker-compose --build -d
-    - name: Run application
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.PROD_HOSTNAME }}
-        username: ${{ secrets.PROD_ADMIN }}
-        key: ${{ secrets.RUNNER_KEY }}
-        script: |
-          docker-compose pull
-          docker-compose --build -d
+    - name: SSH into the Server and Run docker-compose
+      run: |
+        sshpass -p ${{ secrets.PROD_PWD }} ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_HOSTNAME }} << EOF
+          cd ~/LC-Deployment
+          docker-compose up -d
+          exit
+        EOF
     - name: run hostname
       run: hostname
     #     docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
