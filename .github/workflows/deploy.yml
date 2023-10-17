@@ -7,6 +7,17 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
+    - name: ssh scp ssh pipelines
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      with:
+        host: ${{ secrets.PROD_HOSTNAME }}
+        user: ${{ secrets.PROD_ADMIN }}
+        pass: ${{ secrets.PROD_PWD }}
+        port: ${{ secrets.SSH_PORT }}
+        connect_timeout: 10s
+        first_ssh: |
+          docker-compose pull
+          docker-compose --build -d
     - name: Run application
       uses: appleboy/ssh-action@v1.0.0
       with:
