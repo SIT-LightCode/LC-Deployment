@@ -16,7 +16,7 @@ jobs:
           docker login ghcr.io -u ${{ secrets.TUS_GH_USER }} -p ${{ secrets.GHCR_PAT }}
           git pull
           docker-compose pull
-          docker-compose up -d
+          docker-compose up -d -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWD }}
           exit
         EOF
     - name: run hostname
