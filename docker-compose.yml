@@ -11,9 +11,17 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   back:
     container_name: back
-    image: ghcr.io/sit-lightcode/back-end:test
+    image: ghcr.io/sit-lightcode/back-end:latest
     restart: on-failure
     ports:
       - 8080:8080
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
+  front:
+    container_name: front
+    image: ghcr.io/sit-lightcode/front-end:latest
+    restart: on-failure
+    ports:
+      - 80:3000
+    depends_on:
+      - back
