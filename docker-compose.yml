@@ -23,6 +23,6 @@ services:
     image: ghcr.io/sit-lightcode/front-end:latest
     restart: on-failure
     ports:
-      - 80:3000
+      - 80:80
     depends_on:
       - back
