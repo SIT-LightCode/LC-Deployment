@@ -13,6 +13,7 @@ jobs:
       run: |
         sshpass -p "${{ secrets.PROD_PWD }}" ssh -tt -o StrictHostKeyChecking=no ${{ secrets.PROD_ADMIN }}@${{ secrets.PROD_HOSTNAME }} << EOF
           cd ~/LC-Deployment
+          export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWD }}
           envsubst < mysql.env.tmpl > mysql.env
           docker login ghcr.io -u ${{ secrets.TUS_GH_USER }} -p ${{ secrets.GHCR_PAT }}
           git pull
