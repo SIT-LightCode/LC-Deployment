@@ -1,33 +1,37 @@
-CREATE SCHEMA IF NOT EXISTS `lightcodepj` DEFAULT CHARACTER SET utf8mb4 ;
-USE `lightcodepj` ;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-CREATE TABLE IF NOT EXISTS `lightcodepj`.`question` (
-  `question_id` INT NOT NULL AUTO_INCREMENT,
-  `question_name` VARCHAR(100) NOT NULL,
-  `question_is_active` BOOLEAN NOT NULL,
-  `question_rec_created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `question_rec_modifieddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`question_id`),
-  UNIQUE INDEX `question_UNIQUE` (`question_name` ASC) VISIBLE)
+CREATE SCHEMA IF NOT EXISTS `lightcode` DEFAULT CHARACTER SET utf8mb3 ;
+USE `lightcode` ;
+
+CREATE TABLE IF NOT EXISTS `lightcode`.`tag` (
+  `tag_id` INT NOT NULL AUTO_INCREMENT,
+  `topic` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(300) NULL DEFAULT NULL,
+  PRIMARY KEY (`tag_id`),
+  UNIQUE INDEX `topic_UNIQUE` (`topic` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = utf8mb4;
+DEFAULT CHARACTER SET = utf8mb3;
 
-
-CREATE TABLE IF NOT EXISTS `lightcodepj`.`answer` (
-  `answer_id` INT NOT NULL,
-  `question_id` INT NOT NULL,
-  `answer_params` VARCHAR(100) NOT NULL,
-  `answer_is_active` BOOLEAN NOT NULL,
-  `answer_rec_created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `answer_rec_modified_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`answer_id`),
-  CONSTRAINT `fk_myanswer_has_question_myanswer1`
-    FOREIGN KEY (`question_id`)
-    REFERENCES `lightcodepj`.`question` (`question_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
-  )
-
+CREATE TABLE IF NOT EXISTS `lightcode`.`lesson` (
+  `name` VARCHAR(100) NOT NULL,
+  `content` VARCHAR(500) NOT NULL,
+  `tag_id` INT NOT NULL,
+  `lesson_id` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`lesson_id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+    CONSTRAINT `fk_myanswer_has_question_myanswer1`
+    FOREIGN KEY (`tag_id`)
+    REFERENCES `lightcode`.`tag` (`tag_id`))
+    
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4;
+DEFAULT CHARACTER SET = utf8mb3;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+CREATE USER IF NOT EXISTS  'dev'@'%' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON * . * TO 'dev'@'%';
+FLUSH PRIVILEGES;

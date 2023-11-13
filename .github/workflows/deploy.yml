@@ -21,13 +21,5 @@ jobs:
           docker-compose up -d
           exit
         EOF
-    - name: run hostname
-      run: hostname
-    #     docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-    # - name: Login to GHCR
-    #   uses: docker/login-action@v1
-    #   with:
-    #     registry: ghcr.io
-    #     username: ${{ github.actor }}
-    #     password: ${{ secrets.GITHUB_TOKEN }}
-    
+
+
