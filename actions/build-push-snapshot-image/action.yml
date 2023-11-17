@@ -8,7 +8,7 @@ inputs:
     description: 'image name'
     required: true
     type: string
-  tags_name:
+  tags:
     description: 'Tag name'
     required: true
     type: string
@@ -36,7 +36,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ inputs.GHCR_PAT }}
+        password: ${{ inputs.ghcr_pat }}
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
@@ -44,7 +44,7 @@ runs:
       with:
         images: ghcr.io/SIT-LightCode/${{ inputs.image }} 
         tags: |
-          ${{ inputs.tags_name }} 
+          ${{ inputs.tags}} 
           ${{ inputs.type }}
           latest
 
