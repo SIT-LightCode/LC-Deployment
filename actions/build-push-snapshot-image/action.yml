@@ -11,6 +11,7 @@ inputs:
   tags:
     description: 'Tag name'
     required: true
+    default: 'type=sha'
     type: string
   type:
     description: 'type of image is stable or not-stable'
