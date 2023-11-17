@@ -8,6 +8,9 @@ inputs:
     description: 'Tag name'
     required: true
     type: string
+secrets:
+  GHCR_PAT:
+    required: true
 
 runs:
   using: 'composite'
