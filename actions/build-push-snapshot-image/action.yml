@@ -3,14 +3,16 @@
 name: 'Build and Push Docker Image'
 description: 'Builds and pushes a Docker image to a container registry.'
 
-inputs:
-  tags_name:
-    description: 'Tag name'
-    required: true
-    type: string
-secrets:
-  GHCR_PAT:
-    required: true
+on:
+  workflow_call:
+    inputs:
+      tags_name:
+        description: 'Tag name'
+        required: true
+        type: string
+    secrets:
+      GHCR_PAT:
+        required: true
 
 runs:
   using: 'composite'
