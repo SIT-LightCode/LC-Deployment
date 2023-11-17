@@ -4,10 +4,22 @@ name: 'Build and Push Docker Image'
 description: 'Builds and pushes a Docker image to a container registry.'
 
 inputs:
+  image:
+    description: 'image name'
+    required: true
+    type: string
   tags_name:
     description: 'Tag name'
     required: true
     type: string
+  type:
+    description: 'type of image is stable or not-stable'
+    required: true
+    default: 'not'
+    type: choice
+    options:
+      - stable
+      - not-stable
   ghcr_pat:
     description: 'GitHub Container Registry Personal Access Token'
     required: true
@@ -30,9 +42,10 @@ runs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: ghcr.io/SIT-LightCode/front-end
+        images: ghcr.io/SIT-LightCode/${{ inputs.image }} 
         tags: |
-          ${{ inputs.tags_name }}
+          ${{ inputs.tags_name }} 
+          ${{ inputs.type }}
           latest
 
     - name: Build and push
