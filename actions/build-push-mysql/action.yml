@@ -20,9 +20,25 @@ inputs:
     type: choice
     options:
       - stable
-      - not-stable
+      - ""
   ghcr_pat:
     description: 'GitHub Container Registry Personal Access Token'
+    required: true
+    type: string
+  mysql_root_password:
+    description: 'Set the root password for MySQL'
+    required: true
+    type: string
+  mysql_database:
+    description: 'Create an initial database'
+    required: true
+    type: string
+  mysql_user:
+    description: 'Create a MySQL user'
+    required: true
+    type: string
+  mysql_password:
+    description: 'Set the password for the MySQL user'
     required: true
     type: string
 
@@ -57,3 +73,8 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          MYSQL_ROOT_PASSWORD=${{ inputs.mysql_root_password }}
+          MYSQL_DATABASE=${{ inputs.mysql_database }}
+          MYSQL_USER=${{ inputs.mysql_user }}
+          MYSQL_PASSWORD=${{ inputs.mysql_password }}
