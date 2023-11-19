@@ -10,10 +10,16 @@ jobs:
     - name: SSH into the Server and Run docker-compose
       env:
         MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
+        MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
+        MYSQL_USER: ${{secrets.MYSQL_USER}}
+        MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
       run: |
         sshpass -p "${{ secrets.PROD_PWD }}" ssh -tt -o StrictHostKeyChecking=no ${{ secrets.PROD_ADMIN }}@${{ secrets.PROD_HOSTNAME }} << EOF
           cd ~/LC-Deployment
           export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWD }}
+          export MYSQL_DATABASE=${{secrets.MYSQL_DATABASE}}
+          export MYSQL_USER=${{secrets.MYSQL_USER}}
+          export MYSQL_PASSWORD=${{secrets.MYSQL_PASSWORD}}
           envsubst < mysql.env.tmpl > mysql.env
           docker login ghcr.io -u ${{ secrets.TUS_GH_USER }} -p ${{ secrets.GHCR_PAT }}
           git pull
@@ -21,5 +27,6 @@ jobs:
           docker-compose up -d
           exit
         EOF
-
+    - name: run hostname
+      run: hostname
 
