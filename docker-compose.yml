@@ -21,10 +21,10 @@ services:
     volumes:
       - "./data:/var/lib/mysql"
     environment:
-      MYSQL_ROOT_PASSWORD: lc12345
-      MYSQL_DATABASE: lightcode
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: lc12345
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   back:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:latest
@@ -36,10 +36,10 @@ services:
     env_file:
       - mysql.env
     environment:
-      MYSQL_ROOT_PASSWORD: lc12345
-      MYSQL_DATABASE: lightcode
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: lc12345
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   front:
     container_name: front
