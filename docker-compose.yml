@@ -34,7 +34,7 @@ services:
     depends_on:
       - db
     env_file:
-      - mysql.env
+      - backend.env
     environment:
       DB_NAME: ${MYSQL_DATABASE}
       DB_USER: ${MYSQL_USER}
