@@ -9,6 +9,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: SSH into the Server and Run docker-compose
       env:
+        PROD_PWD: ${{ secrets.PROD_PWD }}
+        PROD_ADMIN: ${{ secrets.PROD_ADMIN }}
+        PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME }}
+        TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
+        GHCR_PAT: ${{ secrets.GHCR_PAT }}
         MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
         MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
         MYSQL_USER: ${{secrets.MYSQL_USER}}
