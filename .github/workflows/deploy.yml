@@ -25,7 +25,6 @@ jobs:
           then
             echo "LC-Deployment exists."
           else
-            echo "LC-Deployment does not exist."
             git clone git@github.com:SIT-LightCode/LC-Deployment.git
           fi          
 
@@ -36,7 +35,6 @@ jobs:
           export MYSQL_PASSWORD=$MYSQL_PASSWORD
           if [[ -f "mysql.env" ]]
           then
-            echo "mysql.env exists."
             rm -rf mysql.env
           else
             echo "mysql.env does not exist."
@@ -45,7 +43,6 @@ jobs:
 
           if [[ -f "backend.env" ]]
           then
-            echo "backend.env exists."
             rm -rf backend.env
           else
             echo "backend.env does not exist."
