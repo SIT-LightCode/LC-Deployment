@@ -12,19 +12,19 @@ services:
     volumes:
       - "./config/proxy.conf:/etc/nginx/conf.d/default.conf"
   db:
-    image: mysql:8.1
+    image: ghcr.io/sit-lightcode/database:latest
     container_name: db
-    env_file:
-      - mysql.env
+    # env_file:
+    #   - mysql.env
     ports:
       - 3306:3306
     volumes:
       - "./data:/var/lib/mysql"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    #   MYSQL_DATABASE: ${MYSQL_DATABASE}
+    #   MYSQL_USER: ${MYSQL_USER}
+    #   MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   back:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:latest
