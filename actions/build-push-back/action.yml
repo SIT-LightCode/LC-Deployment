@@ -69,7 +69,3 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        build-args: |
-          MYSQL_DATABASE=${{ inputs.mysql_database }}
-          MYSQL_USER=${{ inputs.mysql_user }}
-          MYSQL_PASSWORD=${{ inputs.mysql_password }}
