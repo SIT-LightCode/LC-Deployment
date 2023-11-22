@@ -25,10 +25,6 @@ inputs:
     description: 'GitHub Container Registry Personal Access Token'
     required: true
     type: string
-  mysql_root_password:
-    description: 'Set the root password for MySQL'
-    required: true
-    type: string
   mysql_database:
     description: 'Create an initial database'
     required: true
