@@ -21,22 +21,6 @@ inputs:
     options:
       - stable
       - ""
-  ghcr_pat:
-    description: 'GitHub Container Registry Personal Access Token'
-    required: true
-    type: string
-  mysql_database:
-    description: 'Create an initial database'
-    required: true
-    type: string
-  mysql_user:
-    description: 'Create a MySQL user'
-    required: true
-    type: string
-  mysql_password:
-    description: 'Set the password for the MySQL user'
-    required: true
-    type: string
 
 runs:
   using: 'composite'
