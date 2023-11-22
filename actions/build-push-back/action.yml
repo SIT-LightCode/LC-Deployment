@@ -1,0 +1,79 @@
+# .github/actions/build-push-image/action.yml
+
+name: 'Build and Push Docker Image'
+description: 'Builds and pushes a Docker image to a container registry.'
+
+inputs:
+  image:
+    description: 'image name'
+    required: true
+    type: string
+  tags:
+    description: 'Tag name'
+    required: true
+    default: 'type=sha'
+    type: string
+  type:
+    description: 'type of image is stable or not-stable'
+    required: true
+    default: 'not'
+    type: choice
+    options:
+      - stable
+      - ""
+  ghcr_pat:
+    description: 'GitHub Container Registry Personal Access Token'
+    required: true
+    type: string
+  mysql_root_password:
+    description: 'Set the root password for MySQL'
+    required: true
+    type: string
+  mysql_database:
+    description: 'Create an initial database'
+    required: true
+    type: string
+  mysql_user:
+    description: 'Create a MySQL user'
+    required: true
+    type: string
+  mysql_password:
+    description: 'Set the password for the MySQL user'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Login to container registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ inputs.ghcr_pat }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ghcr.io/SIT-LightCode/${{ inputs.image }} 
+        tags: |
+          ${{ inputs.tags}} 
+          ${{ inputs.type }}
+          latest
+
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        build-args: |
+          MYSQL_DATABASE=${{ inputs.mysql_database }}
+          MYSQL_USER=${{ inputs.mysql_user }}
+          MYSQL_PASSWORD=${{ inputs.mysql_password }}
