@@ -20,7 +20,7 @@ jobs:
         MYSQL_USER: ${{secrets.MYSQL_USER}}
         MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
       run: |
-        sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
+        yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
           export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
           export MYSQL_DATABASE=$MYSQL_DATABASE
           export MYSQL_USER=$MYSQL_USER
