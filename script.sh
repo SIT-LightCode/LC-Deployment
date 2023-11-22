@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sshpass -p "${ PROD_PWD }" ssh -tt -o StrictHostKeyChecking=no ${ PROD_ADMIN }@${ PROD_HOSTNAME } << EOF
+sshpass -p ${ PROD_PWD } ssh -tt -o StrictHostKeyChecking=no ${ PROD_ADMIN }@${ PROD_HOSTNAME } << EOF
     cd ~/LC-Deployment
     envsubst < mysql.env.tmpl > mysql.env
     envsubst < backend.env.tmpl > backend.env
