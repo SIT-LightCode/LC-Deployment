@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export MYSQL_ROOT_PASSWORD= $MYSQL_ROOT_PASSWORD
 sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
     cd ~/LC-Deployment
     envsubst < mysql.env.tmpl > mysql.env
