@@ -21,6 +21,16 @@ jobs:
       run: |
         sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
           cd ~/LC-Deployment
+          export MYSQL_ROOT_PASSWORD=$MYSQL_DATABASE
+          export MYSQL_DATABASE=$MYSQL_DATABASE
+          export MYSQL_USER=$MYSQL_USER
+          export MYSQL_PASSWORD=$MYSQL_PASSWORD
+          if [[ -f "mysql.env" ]]
+          then
+            echo "mysql.env exists."
+          else
+            echo "mysql.env does not exist."
+          fi
           envsubst < mysql.env.tmpl > mysql.env
           envsubst < backend.env.tmpl > backend.env
           docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
