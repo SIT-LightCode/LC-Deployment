@@ -54,8 +54,8 @@ jobs:
           envsubst < backend.env.tmpl > backend.env
           
           git pull
-          docker-compose -f docker-compose-dev.yml pull
-          docker-compose -f docker-compose-dev.yml up -d
+          docker-compose -f docker-compose-develop.yml pull
+          docker-compose -f docker-compose-develop.yml up -d
           exit
         EOF
     - name: run hostname
