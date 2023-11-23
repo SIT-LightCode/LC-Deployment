@@ -32,7 +32,7 @@ jobs:
           then
             echo "LC-Deployment exists."
           else
-            git clone git@github.com:SIT-LightCode/LC-Deployment.git
+            yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
           fi          
 
           cd ~/LC-Deployment
