@@ -19,20 +19,23 @@ jobs:
         MYSQL_USER: ${{secrets.MYSQL_USER}}
         MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
       run: |
-        sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
+        yes | sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
+          export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+          export MYSQL_DATABASE=$MYSQL_DATABASE
+          export MYSQL_USER=$MYSQL_USER
+          export MYSQL_PASSWORD=$MYSQL_PASSWORD
+
           docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
+
           if [[ -f "LC-Deployment" ]]
           then
             echo "LC-Deployment exists."
           else
-            git clone git@github.com:SIT-LightCode/LC-Deployment.git
+            yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
           fi          
 
           cd ~/LC-Deployment
-          export MYSQL_ROOT_PASSWORD=$MYSQL_DATABASE
-          export MYSQL_DATABASE=$MYSQL_DATABASE
-          export MYSQL_USER=$MYSQL_USER
-          export MYSQL_PASSWORD=$MYSQL_PASSWORD
+
           if [[ -f "mysql.env" ]]
           then
             rm -rf mysql.env

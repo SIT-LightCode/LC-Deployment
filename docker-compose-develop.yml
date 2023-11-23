@@ -27,7 +27,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   back:
     container_name: back
-    image: ghcr.io/sit-lightcode/back-end:stable
+    image: ghcr.io/sit-lightcode/back-end:latest
     restart: on-failure
     ports:
       - 8080:8080
@@ -44,7 +44,7 @@ services:
 
   front:
     container_name: front
-    image: ghcr.io/sit-lightcode/front-end:stable
+    image: ghcr.io/sit-lightcode/front-end:latest
     restart: on-failure
     ports:
       - 3000:80
