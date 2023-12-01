@@ -55,6 +55,7 @@ jobs:
           git pull
           docker-compose pull
           docker-compose up -d
+          echo y | docker system prune -a
           exit
         EOF
     - name: run hostname
