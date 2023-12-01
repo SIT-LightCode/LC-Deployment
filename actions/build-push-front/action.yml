@@ -50,7 +50,7 @@ runs:
           latest
 
     - name: Build and push if stable
-      if: ${{ inputs.tags }} == 'stable'
+      if: ${{ inputs.type }} == 'stable'
       uses: docker/build-push-action@v2
       with:
         context: .
@@ -60,7 +60,7 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
 
     - name: Build and push if dev
-      if: ${{ inputs.tags }} == 'not-stable'
+      if: ${{ inputs.type }} == 'not-stable'
       uses: docker/build-push-action@v2
       with:
         context: .
