@@ -20,7 +20,7 @@ inputs:
     type: choice
     options:
       - stable
-      - not-stable
+      - dev
   ghcr_pat:
     description: 'GitHub Container Registry Personal Access Token'
     required: true
