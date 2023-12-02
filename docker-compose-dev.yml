@@ -29,10 +29,10 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - db-net
-      
+
   back:
     container_name: back
-    image: ghcr.io/sit-lightcode/back-end:latest
+    image: ghcr.io/sit-lightcode/back-end:dev
     restart: on-failure
     ports:
       - 8080:8080
@@ -51,7 +51,7 @@ services:
       - db-net
   front:
     container_name: front
-    image: ghcr.io/sit-lightcode/front-end:latest
+    image: ghcr.io/sit-lightcode/front-end:dev
     restart: on-failure
     ports:
       - 3000:80

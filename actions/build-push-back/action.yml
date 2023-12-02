@@ -20,7 +20,7 @@ inputs:
     type: choice
     options:
       - stable
-      - ""
+      - dev
 
 runs:
   using: 'composite'
