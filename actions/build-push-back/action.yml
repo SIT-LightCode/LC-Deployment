@@ -21,6 +21,10 @@ inputs:
     options:
       - stable
       - dev
+  ghcr_pat:
+    description: 'GitHub Container Registry Personal Access Token'
+    required: true
+    type: string
 
 runs:
   using: 'composite'
