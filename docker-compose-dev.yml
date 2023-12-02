@@ -13,6 +13,7 @@ services:
       - "./config/proxy-dev.conf:/etc/nginx/conf.d/default.conf"
     networks:
       - lc-net
+      
   db:
     image: mysql:8.1
     container_name: db
