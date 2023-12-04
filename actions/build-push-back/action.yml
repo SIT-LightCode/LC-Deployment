@@ -50,7 +50,6 @@ runs:
           latest
 
     - name: Build and push if stable
-      if: inputs.type == 'stable'
       uses: docker/build-push-action@v2
       with:
         context: .
@@ -58,14 +57,3 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-
-    - name: Build and push if dev
-      if: inputs.type == 'dev'
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./dockerfile-dev
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-    
