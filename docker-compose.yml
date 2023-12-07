@@ -81,4 +81,4 @@ networks:
   db-net:
     driver: bridge
   ex-net:
-    dricer: bridge
+    driver: bridge
