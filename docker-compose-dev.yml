@@ -65,7 +65,7 @@ services:
 
   nodex:
     container_name: nodex
-    image: ghcr.io/sit-lightcode/nodex:stable
+    image: ghcr.io/sit-lightcode/nodex:dev
     restart: on-failure
     ports:
       - 8000:8000
