@@ -65,9 +65,20 @@ services:
       - "./config/web-server.conf:/etc/nginx/conf.d/default.conf"
     networks:
       - lc-net
+  
+  nodex:
+    container_name: nodex
+    image: ghcr.io/sit-lightcode/nodex:stable
+    restart: on-failure
+    ports:
+      - 8000:8000
+    networks:
+      - ex-net
 
 networks:
   lc-net:
     driver: bridge
   db-net:
     driver: bridge
+  ex-net:
+    dricer: bridge
