@@ -9,8 +9,8 @@ on:
         default: 'no'
         type: choice
         options:
-          - yes
-          - no
+          - 'yes'
+          - 'no'
 jobs:
   deploy:
     runs-on: self-hosted
