@@ -2,7 +2,15 @@ name: 'deploy on dev server'
 on:
   workflow_call:
   workflow_dispatch:
-
+    inputs:
+      restart:
+        description: 'down service before up again'
+        required: true
+        default: 'no'
+        type: choice
+        options:
+          - yes
+          - no
 jobs:
   deploy:
     runs-on: self-hosted
@@ -19,6 +27,7 @@ jobs:
         MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
         MYSQL_USER: ${{secrets.MYSQL_USER}}
         MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
+        RESTART: ${{inputs.restart}}
       run: |
         yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
           export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
@@ -36,6 +45,11 @@ jobs:
           fi          
 
           cd ~/LC-Deployment
+
+          if [[ $RESTART = "yes" ]]
+          then
+            docker-compose -f docker-compose-dev.yml down
+          fi
 
           if [[ -f "mysql.env" ]]
           then
