@@ -52,7 +52,8 @@ services:
     networks:
       - lc-net
       - db-net
-
+      - ex-net
+      
   front:
     container_name: front
     image: ghcr.io/sit-lightcode/front-end:stable
