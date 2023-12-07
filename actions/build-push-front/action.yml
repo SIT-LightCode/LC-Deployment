@@ -16,7 +16,7 @@ inputs:
   type:
     description: 'type of image is stable or not-stable'
     required: true
-    default: 'not'
+    default: 'dev'
     type: choice
     options:
       - stable
