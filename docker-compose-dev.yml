@@ -47,6 +47,7 @@ services:
       DB_PASS: ${MYSQL_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
+      NODEX: nodex
     networks:
       - lc-net
       - db-net
@@ -72,7 +73,7 @@ services:
       - 8000:8000
     networks:
       - ex-net
-    NODEX: nodex
+
 
 networks:
   lc-net:
