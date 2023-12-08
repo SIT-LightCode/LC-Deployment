@@ -56,7 +56,7 @@ services:
       DB_PASS: ${MYSQL_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
-      NODEX: 192.168.224.3
+      NODEX: lightcodedev.sit.kmutt.ac.th
     networks:
       - lc-net
       - db-net
