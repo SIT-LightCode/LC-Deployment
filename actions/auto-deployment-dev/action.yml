@@ -1,16 +1,20 @@
-name: 'deploy on dev server'
-on:
-  workflow_dispatch:
-    inputs:
-      restart:
-        description: 'down service before up again'
-        required: true
-        default: 'no'
-        type: choice
-        options:
-          - 'yes'
-          - 'no'
-jobs:
+# .github/actions/build-push-image/action.yml
+
+name: 'auto deploy on dev server'
+description: 'deploy on dev server'
+
+inputs:
+  restart:
+    description: 'down service before up again'
+    default: 'no'
+    type: choice
+    options:
+      - 'yes'
+      - 'no'
+
+runs:
+  using: 'composite'
+  steps:
   deploy:
     runs-on: self-hosted
     steps:
@@ -72,5 +76,3 @@ jobs:
           echo y | docker system prune -a
           exit
         EOF
-    - name: run hostname
-      run: hostname
