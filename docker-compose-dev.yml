@@ -30,6 +30,14 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - db-net
+  nodex:
+    container_name: nodex
+    image: ghcr.io/sit-lightcode/nodex:dev
+    restart: on-failure
+    ports:
+      - 8000:8000
+    networks:
+      - ex-net
 
   back:
     container_name: back
@@ -39,6 +47,7 @@ services:
       - 8080:8080
     depends_on:
       - db
+      - nodex
     env_file:
       - backend.env
     environment:
@@ -47,6 +56,7 @@ services:
       DB_PASS: ${MYSQL_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
+      NODEX: nodex
     networks:
       - lc-net
       - db-net
@@ -64,14 +74,7 @@ services:
     networks:
       - lc-net
 
-  nodex:
-    container_name: nodex
-    image: ghcr.io/sit-lightcode/nodex:dev
-    restart: on-failure
-    ports:
-      - 8000:8000
-    networks:
-      - ex-net
+
 
 networks:
   lc-net:

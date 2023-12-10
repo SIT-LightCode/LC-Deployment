@@ -21,8 +21,6 @@ services:
     container_name: db
     env_file:
       - mysql.env
-    ports:
-      - 3306:3306
     volumes:
       - "../data:/var/lib/mysql"
     environment:
@@ -37,8 +35,6 @@ services:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:stable
     restart: on-failure
-    ports:
-      - 8080:8080
     depends_on:
       - db
     env_file:
@@ -49,6 +45,7 @@ services:
       DB_PASS: ${MYSQL_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
+      NODEX: nodex
     networks:
       - lc-net
       - db-net
@@ -58,8 +55,6 @@ services:
     container_name: front
     image: ghcr.io/sit-lightcode/front-end:stable
     restart: on-failure
-    ports:
-      - 3000:80
     depends_on:
       - back
     volumes:
@@ -71,8 +66,6 @@ services:
     container_name: nodex
     image: ghcr.io/sit-lightcode/nodex:stable
     restart: on-failure
-    ports:
-      - 8000:8000
     networks:
       - ex-net
 
