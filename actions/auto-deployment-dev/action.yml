@@ -56,7 +56,7 @@ runs:
         MYSQL_PASSWORD: ${{inputs.MYSQL_PASSWORD}}
         RESTART: ${{inputs.RESTART}}
       run: |
-        yes | sshpass -p $DEV_PWD ssh -t -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
+        yes | sshpass -p $DEV_PWD ssh StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
           export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
           export MYSQL_DATABASE=$MYSQL_DATABASE
           export MYSQL_USER=$MYSQL_USER
