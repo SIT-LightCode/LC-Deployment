@@ -12,13 +12,13 @@ inputs:
       - 'yes'
       - 'no'
   DEV_PWD:
-    description: 'DEV_PWD'
+    description: 'dev server password'
     required: true
   DEV_ADMIN:
-    description: 'DEV_ADMIN'
+    description: 'dev server admin username'
     required: true
   DEV_HOSTNAME:
-    description: 'DEV_HOSTNAME'
+    description: 'dev server hostname'
     required: true
   TUS_GH_USER:
     description: 'TUS_GH_USER'
@@ -43,13 +43,14 @@ runs:
   using: 'composite'
   steps:
     - name: SSH into the Server and Run docker-compose
+      shell: bash
       env:
         DEV_PWD: ${{ inputs.DEV_PWD }}
         DEV_ADMIN: ${{ inputs.DEV_ADMIN }}
         DEV_HOSTNAME: ${{ inputs.DEV_HOSTNAME }}
         TUS_GH_USER: ${{ inputs.TUS_GH_USER }}
         GHCR_PAT: ${{ inputs.GHCR_PAT }}
-        MYSQL_ROOT_PASSWORD: ${{ inputs.MYSQL_PASSWD }}
+        MYSQL_ROOT_PASSWORD: ${{ inputs.MYSQL_ROOT_PASSWORD }}
         MYSQL_DATABASE: ${{inputs.MYSQL_DATABASE}}
         MYSQL_USER: ${{inputs.MYSQL_USER}}
         MYSQL_PASSWORD: ${{inputs.MYSQL_PASSWORD}}
