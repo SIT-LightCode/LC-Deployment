@@ -4,29 +4,56 @@ name: 'auto deploy on dev server'
 description: 'deploy on dev server'
 
 inputs:
-  restart:
+  RESTART:
     description: 'down service before up again'
     default: 'no'
     type: choice
     options:
       - 'yes'
       - 'no'
+  DEV_PWD:
+    description: 'DEV_PWD'
+    required: true
+  DEV_ADMIN:
+    description: 'DEV_ADMIN'
+    required: true
+  DEV_HOSTNAME:
+    description: 'DEV_HOSTNAME'
+    required: true
+  TUS_GH_USER:
+    description: 'TUS_GH_USER'
+    required: true
+  GHCR_PAT:
+    description: 'GHCR_PAT'
+    required: true
+  MYSQL_ROOT_PASSWORD:
+    description: 'MYSQL_ROOT_PASSWORD'
+    required: true
+  MYSQL_DATABASE:
+    description: 'MYSQL_DATABASE'
+    required: true
+  MYSQL_USER:
+    description: 'MYSQL_USER'
+    required: true
+  MYSQL_PASSWORD:
+    description: 'MYSQL_PASSWORD'
+    required: true
 
 runs:
   using: 'composite'
   steps:
     - name: SSH into the Server and Run docker-compose
       env:
-        DEV_PWD: ${{ secrets.DEV_PWD }}
-        DEV_ADMIN: ${{ secrets.DEV_ADMIN }}
-        DEV_HOSTNAME: ${{ secrets.DEV_HOSTNAME }}
-        TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
-        GHCR_PAT: ${{ secrets.GHCR_PAT }}
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
-        MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
-        MYSQL_USER: ${{secrets.MYSQL_USER}}
-        MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
-        RESTART: ${{inputs.restart}}
+        DEV_PWD: ${{ inputs.DEV_PWD }}
+        DEV_ADMIN: ${{ inputs.DEV_ADMIN }}
+        DEV_HOSTNAME: ${{ inputs.DEV_HOSTNAME }}
+        TUS_GH_USER: ${{ inputs.TUS_GH_USER }}
+        GHCR_PAT: ${{ inputs.GHCR_PAT }}
+        MYSQL_ROOT_PASSWORD: ${{ inputs.MYSQL_PASSWD }}
+        MYSQL_DATABASE: ${{inputs.MYSQL_DATABASE}}
+        MYSQL_USER: ${{inputs.MYSQL_USER}}
+        MYSQL_PASSWORD: ${{inputs.MYSQL_PASSWORD}}
+        RESTART: ${{inputs.RESTART}}
       run: |
         yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
           export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
