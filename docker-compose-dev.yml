@@ -78,7 +78,7 @@ services:
     container_name: cadvisor
     restart: always
     ports:
-      - "9100:8080"
+      - "9000:8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -89,8 +89,6 @@ services:
     container_name: node-exporter
     ports:
       - '9100:9100'
-    networks:
-      - monitor-net
 
 networks:
   lc-net:
