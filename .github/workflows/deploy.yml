@@ -47,7 +47,10 @@ jobs:
 
           if [[ $RESTART = "yes" ]]
           then
-            docker-compose down
+            docker-compose rm -s -f front
+            docker-compose rm -s -f back
+            docker-compose rm -s -f proxy
+            docker-compose rm -s -f db
           fi
 
           if [[ -f "mysql.env" ]]
