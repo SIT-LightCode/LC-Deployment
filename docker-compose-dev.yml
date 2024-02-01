@@ -90,8 +90,7 @@ services:
     volumes:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ../log:/usr/share/filebeat/logs
-    networks:
-      - elk
+
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
