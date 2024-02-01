@@ -91,7 +91,7 @@ services:
     container_name: filebeat
     command: filebeat -e -d filebeat.yml -d "publish"
     volumes:
-      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ../log:/usr/share/filebeat/logs
 
   node-exporter:
