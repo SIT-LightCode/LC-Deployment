@@ -68,6 +68,13 @@ runs:
           then
             echo "LC-Deployment exists."
           else
+            echo "not exist"
+          fi  
+
+          if [[ -f "LC-Deployment" ]]
+          then
+            echo "LC-Deployment exists."
+          else
             yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
           fi          
 

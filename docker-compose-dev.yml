@@ -84,6 +84,16 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.12.0
+    command: filebeat -e -d filebeat.yml -d "publish"
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ../log:/usr/share/filebeat/logs
+    networks:
+      - elk
+    depends_on:
+      - logstash
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
