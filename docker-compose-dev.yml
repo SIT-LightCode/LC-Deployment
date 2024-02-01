@@ -87,7 +87,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
   filebeat:
-    image: docker.elastic.co/beats/filebeat:8.12.0
+    build:
+      context: filebeat/
     container_name: filebeat
     command: filebeat -e -d filebeat.yml -d "publish"
     volumes:
