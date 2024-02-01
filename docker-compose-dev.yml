@@ -92,8 +92,6 @@ services:
       - ../log:/usr/share/filebeat/logs
     networks:
       - elk
-    depends_on:
-      - logstash
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
