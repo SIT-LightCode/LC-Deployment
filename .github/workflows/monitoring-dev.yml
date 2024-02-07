@@ -1,0 +1,33 @@
+name: Check Service Status
+
+on:
+  schedule:
+    - cron: "*/1 * * * *" # Run every 5 minutes, adjust as needed
+
+jobs:
+  check_service_status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send GET request to API
+        id: api_request
+        run: |
+          API_URL="http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details"
+          RESPONSE=$(curl -sS $API_URL)
+          echo "API_RESPONSE=${RESPONSE}" >> $GITHUB_ENV
+
+      - name: Check API response status
+        run: |
+          STATUS=$(echo "${{ env.API_RESPONSE }}" | jq -r '.status')
+          echo "STATUS=${STATUS}" >> $GITHUB_ENV
+          if [ "$STATUS" = "Alive" ]; then
+            echo "Service is alive."
+          else
+            echo "Service is not alive."
+          fi
+
+      - name: Send Discord message on success
+        if: env.SEND_DISCORD_MESSAGE == 'true'
+        run: |
+          curl -X POST -H "Content-type: application/json" --data \
+            "{\"content\":\"Service status: ${{ env.STATUS }}\"}" \
+            "https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }}"
