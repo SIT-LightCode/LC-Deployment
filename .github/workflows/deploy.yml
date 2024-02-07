@@ -1,80 +1,119 @@
-name: 'deploy on production'
+name: "deploy on production"
 on:
   workflow_dispatch:
     inputs:
       restart:
-        description: 'down service before up again'
+        description: "down service before up again"
         required: true
-        default: 'no'
+        default: "no"
         type: choice
         options:
-          - 'yes'
-          - 'no'
+          - "yes"
+          - "no"
 jobs:
+  discord_noti_:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Send Discord message
+        run: |
+          if [ "${{ github.actor }}" = "huato112" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"content": "huato112 (<@!241526471611514881>) is deploying.."}' \
+              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
+          elif [ "${{ github.actor }}" = "tuskingcup" ]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"content": "tuskingcup (<@!381328982420881449>) is deploying.."}' \
+              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
+          else
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{"content": "<@&1157965476970909748> Please check Gitlab_User: ${{ github.actor }} is deploying."}' \
+              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
+          fi
+
   deploy:
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - name: SSH into the Server and Run docker-compose
-      env:
-        PROD_PWD: ${{ secrets.PROD_PWD }}
-        PROD_ADMIN: ${{ secrets.PROD_ADMIN }}
-        PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME }}
-        TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
-        GHCR_PAT: ${{ secrets.GHCR_PAT }}
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
-        MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
-        MYSQL_USER: ${{secrets.MYSQL_USER}}
-        MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
-        RESTART: ${{inputs.restart}}
-      run: |
-        yes | sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
-          export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-          export MYSQL_DATABASE=$MYSQL_DATABASE
-          export MYSQL_USER=$MYSQL_USER
-          export MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - uses: actions/checkout@v2
+      - name: SSH into the Server and Run docker-compose
+        env:
+          PROD_PWD: ${{ secrets.PROD_PWD }}
+          PROD_ADMIN: ${{ secrets.PROD_ADMIN }}
+          PROD_HOSTNAME: ${{ secrets.PROD_HOSTNAME }}
+          TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
+          MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
+          MYSQL_USER: ${{secrets.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
+          RESTART: ${{inputs.restart}}
+        run: |
+          yes | sshpass -p $PROD_PWD ssh -tt -o StrictHostKeyChecking=no $PROD_ADMIN@$PROD_HOSTNAME << EOF
+            export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+            export MYSQL_DATABASE=$MYSQL_DATABASE
+            export MYSQL_USER=$MYSQL_USER
+            export MYSQL_PASSWORD=$MYSQL_PASSWORD
 
-          docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
+            docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
 
-          if [[ -f "LC-Deployment" ]]
-          then
-            echo "LC-Deployment exists."
-          else
-            yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
-          fi          
+            if [[ -f "LC-Deployment" ]]
+            then
+              echo "LC-Deployment exists."
+            else
+              yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
+            fi          
 
-          cd ~/LC-Deployment
+            cd ~/LC-Deployment
 
-          if [[ $RESTART = "yes" ]]
-          then
-            docker-compose rm -s -f front
-            docker-compose rm -s -f back
-            docker-compose rm -s -f proxy
-            docker-compose rm -s -f db
-          fi
+            if [[ $RESTART = "yes" ]]
+            then
+              docker-compose rm -s -f front
+              docker-compose rm -s -f back
+              docker-compose rm -s -f proxy
+              docker-compose rm -s -f db
+            fi
 
-          if [[ -f "mysql.env" ]]
-          then
-            rm -rf mysql.env
-          else
-            echo "mysql.env does not exist."
-          fi
-          envsubst < mysql.env.tmpl > mysql.env
+            if [[ -f "mysql.env" ]]
+            then
+              rm -rf mysql.env
+            else
+              echo "mysql.env does not exist."
+            fi
+            envsubst < mysql.env.tmpl > mysql.env
 
-          if [[ -f "backend.env" ]]
-          then
-            rm -rf backend.env
-          else
-            echo "backend.env does not exist."
-          fi
-          envsubst < backend.env.tmpl > backend.env
-          
-          git pull
-          docker-compose pull
-          docker-compose up -d
-          echo y | docker system prune -a
-          exit
-        EOF
-    - name: run hostname
-      run: hostname
+            if [[ -f "backend.env" ]]
+            then
+              rm -rf backend.env
+            else
+              echo "backend.env does not exist."
+            fi
+            envsubst < backend.env.tmpl > backend.env
+            
+            git pull
+            docker-compose pull
+            docker-compose up -d
+            echo y | docker system prune -a
+            exit
+          EOF
+      - name: run hostname
+        run: hostname
 
+  discord_noti_monitoring:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@master
+      - name: Send updated Discord message on success
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "Deployment by ${{ github.actor }} is successful!"}' \
+            https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
+      - name: Send updated Discord message on failure
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "Deployment by ${{ github.actor }} has failed!"}' \
+            https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
