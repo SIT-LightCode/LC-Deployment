@@ -20,13 +20,13 @@ jobs:
         run: |
           if [[ "${{ github.actor }}" == "huato112" ]]; then
             mention="@bluebik"
-            message="huato112 (${mention}) is deploying.."
+            message="huato112 (<@&${mention}>) is deploying.."
           elif [[ "${{ github.actor }}" == "tuskingcup" ]]; then
             mention="@tuskungg"
-            message="huato112 (${mention}) is deploying.."
+            message="tuskingcup (<@&${mention}>) is deploying.."
           else
             mention=""
-            message="huato112 (UNKNOWN_USER) is deploying."
+            message="${{ github.actor }} (UNKNOWN_USER) is deploying."
           fi
           echo "MENTION=${mention}" >> $GITHUB_ENV
           echo "MESSAGE=${message}" >> $GITHUB_ENV
