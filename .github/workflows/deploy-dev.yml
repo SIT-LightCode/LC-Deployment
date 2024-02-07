@@ -1,79 +1,91 @@
-name: 'deploy on dev server'
+name: "deploy on dev server"
 on:
   workflow_dispatch:
     inputs:
       restart:
-        description: 'down service before up again'
+        description: "down service before up again"
         required: true
-        default: 'no'
+        default: "no"
         type: choice
         options:
-          - 'yes'
-          - 'no'
+          - "yes"
+          - "no"
 jobs:
+  discord_noti:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Send slack message
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.WEBHOOK_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          args: ${{ github.actor }} is deploying.
+
   deploy:
     runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - name: SSH into the Server and Run docker-compose
-      env:
-        DEV_PWD: ${{ secrets.DEV_PWD }}
-        DEV_ADMIN: ${{ secrets.DEV_ADMIN }}
-        DEV_HOSTNAME: ${{ secrets.DEV_HOSTNAME }}
-        TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
-        GHCR_PAT: ${{ secrets.GHCR_PAT }}
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
-        MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
-        MYSQL_USER: ${{secrets.MYSQL_USER}}
-        MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
-        RESTART: ${{inputs.restart}}
-      run: |
-        yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
-          export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-          export MYSQL_DATABASE=$MYSQL_DATABASE
-          export MYSQL_USER=$MYSQL_USER
-          export MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - uses: actions/checkout@v2
+      - name: SSH into the Server and Run docker-compose
+        env:
+          DEV_PWD: ${{ secrets.DEV_PWD }}
+          DEV_ADMIN: ${{ secrets.DEV_ADMIN }}
+          DEV_HOSTNAME: ${{ secrets.DEV_HOSTNAME }}
+          TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_PASSWD }}
+          MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
+          MYSQL_USER: ${{secrets.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
+          RESTART: ${{inputs.restart}}
+        run: |
+          yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
+            export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+            export MYSQL_DATABASE=$MYSQL_DATABASE
+            export MYSQL_USER=$MYSQL_USER
+            export MYSQL_PASSWORD=$MYSQL_PASSWORD
 
-          docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
-          
-          if [[ -f "LC-Deployment" ]]
-          then
-            echo "LC-Deployment exists."
-          else
-            yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
-          fi          
+            docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
+            
+            if [[ -f "LC-Deployment" ]]
+            then
+              echo "LC-Deployment exists."
+            else
+              yes | git clone git@github.com:SIT-LightCode/LC-Deployment.git
+            fi          
 
-          cd ~/LC-Deployment
+            cd ~/LC-Deployment
 
-          if [[ $RESTART = "yes" ]]
-          then
-            docker-compose -f docker-compose-dev.yml rm -s -f front
-            docker-compose -f docker-compose-dev.yml rm -s -f back
-            docker-compose -f docker-compose-dev.yml rm -s -f proxy
-            docker-compose -f docker-compose-dev.yml rm -s -f db
-          fi
+            if [[ $RESTART = "yes" ]]
+            then
+              docker-compose -f docker-compose-dev.yml rm -s -f front
+              docker-compose -f docker-compose-dev.yml rm -s -f back
+              docker-compose -f docker-compose-dev.yml rm -s -f proxy
+              docker-compose -f docker-compose-dev.yml rm -s -f db
+            fi
 
-          if [[ -f "mysql.env" ]]
-          then
-            rm -rf mysql.env
-          else
-            echo "mysql.env does not exist."
-          fi
-          envsubst < mysql.env.tmpl > mysql.env
+            if [[ -f "mysql.env" ]]
+            then
+              rm -rf mysql.env
+            else
+              echo "mysql.env does not exist."
+            fi
+            envsubst < mysql.env.tmpl > mysql.env
 
-          if [[ -f "backend.env" ]]
-          then
-            rm -rf backend.env
-          else
-            echo "backend.env does not exist."
-          fi
-          envsubst < backend.env.tmpl > backend.env
-          
-          git pull
-          docker-compose -f docker-compose-dev.yml pull
-          docker-compose -f docker-compose-dev.yml up -d --build
-          echo y | docker system prune -a
-          exit
-        EOF
-    - name: run hostname
-      run: hostname
+            if [[ -f "backend.env" ]]
+            then
+              rm -rf backend.env
+            else
+              echo "backend.env does not exist."
+            fi
+            envsubst < backend.env.tmpl > backend.env
+            
+            git pull
+            docker-compose -f docker-compose-dev.yml pull
+            docker-compose -f docker-compose-dev.yml up -d --build
+            echo y | docker system prune -a
+            exit
+          EOF
+      - name: run hostname
+        run: hostname
