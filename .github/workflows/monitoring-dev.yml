@@ -13,18 +13,11 @@ jobs:
   check-api-status:
     runs-on: self-hosted
     steps:
-      - name: Check the API and set the status as env var
+      - name: Check the API and set status as env var
         id: api-check
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const response = await fetch('http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details');
-            const data = await response.json();
-            const status = data.status;            
-            return status;
-
-      - name: Setup env
-        run: echo "STATUS=${{ steps.api-check.outputs.result }}" >> $GITHUB_ENV
+        run: |
+          STATUS=$(curl -s 'http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details' | jq -r .status)
+          echo "STATUS=${STATUS}" >> $GITHUB_ENV
 
       - name: Determine message and mention
         id: determine-msg
