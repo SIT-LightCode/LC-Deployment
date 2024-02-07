@@ -19,10 +19,10 @@ jobs:
         id: determine
         run: |
           if [[ "${{ github.actor }}" == "huato112" ]]; then
-            mention="<@&bluebik>"
+            mention="<@&241526471611514881>"
             message="huato112 (${mention}) is deploying.."
           elif [[ "${{ github.actor }}" == "tuskingcup" ]]; then
-            mention="<@&tuskungg>"
+            mention="<@&381328982420881449>"
             message="tuskingcup (${mention}) is deploying.."
           else
             mention=""
