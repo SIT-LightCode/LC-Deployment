@@ -24,7 +24,7 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           args: ${{ github.actor }} is deploying.
       - name: Send updated Discord message on success
-        if: success(=)
+        if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d '{"content": "Deployment by ${{ github.actor }} is successful!"}' \
