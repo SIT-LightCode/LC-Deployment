@@ -2,11 +2,11 @@ name: Check Service Status
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # Run every 5 minutes, adjust as needed
+    - cron: "*/1 * * * *"
 
 jobs:
   check_service_status:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Send GET request to API
         id: api_request
