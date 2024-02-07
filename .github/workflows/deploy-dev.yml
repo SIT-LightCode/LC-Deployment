@@ -15,29 +15,30 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
       - name: Determine message and mention
+        id: determine
         run: |
           if [[ "${{ github.actor }}" == "huato112" ]]; then
             mention="@bluebik"
-            message="${{ github.actor }} (${mention}) is deploying.."
+            message="huato112 (${mention}) is deploying.."
           elif [[ "${{ github.actor }}" == "tuskingcup" ]]; then
             mention="@tuskungg"
-            message="${{ github.actor }} (${mention}) is deploying.."
+            message="huato112 (${mention}) is deploying.."
           else
             mention=""
-            message="${{ github.actor }} (UNKNOWN_USER) is deploying."
+            message="huato112 (UNKNOWN_USER) is deploying."
           fi
-          echo "::set-output name=mention::${mention}"
-          echo "::set-output name=message::${message}"
-      - name: Send slack message
+          echo "MENTION=${mention}" >> $GITHUB_ENV
+          echo "MESSAGE=${message}" >> $GITHUB_ENV
+
+      - name: Send Discord message
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.WEBHOOK_ID }}
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          args: ${{ steps.determine.outputs.message }}
+          args: ${{ env.MESSAGE }}
         env:
-          MENTION: ${{ steps.determine.outputs.mention }}
+          MENTION: ${{ env.MENTION }}
 
   deploy:
     runs-on: self-hosted
