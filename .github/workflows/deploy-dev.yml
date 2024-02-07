@@ -14,6 +14,7 @@ jobs:
   discord_noti:
     name: Build
     runs-on: ubuntu-latest
+    needs: deploy
     steps:
       - uses: actions/checkout@master
       - name: Send slack message
@@ -23,13 +24,13 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           args: ${{ github.actor }} is deploying.
       - name: Send updated Discord message on success
-        if: success(deploy)
+        if: success(=)
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d '{"content": "Deployment by ${{ github.actor }} is successful!"}' \
             https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }}
       - name: Send updated Discord message on failure
-        if: failure(deploy)
+        if: failure()
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d '{"content": "Deployment by ${{ github.actor }} has failed!"}' \
