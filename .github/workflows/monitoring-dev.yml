@@ -18,10 +18,9 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const axios = require('axios')
-            const response = await axios.get('http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details')
-            const status = response.data.status          
-            return status
+            const response = await octokit.request('GET http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details');
+            const status = response.data.status;
+            return status;
 
       - name: Setup env
         run: echo "STATUS=${{ steps.api-check.outputs.result }}" >> $GITHUB_ENV
