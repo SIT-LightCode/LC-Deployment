@@ -101,6 +101,7 @@ jobs:
           EOF
       - name: run hostname
         run: hostname
+
   discord_noti_monitoring:
     name: Build
     runs-on: ubuntu-latest
