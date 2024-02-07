@@ -10,35 +10,35 @@ on:
       - main # Change 'main' to the branch you want to trigger the workflow on
 
 jobs:
-  check_service_status:
+  check-api-status:
     runs-on: ubuntu-latest
     steps:
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Check the API and set the status as env var
+        id: api-check
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const axios = require('axios')
+            const response = await axios.get('http://lightcodedev.sit.kmutt.ac.th:8080/api/v1/details')
+            const status = response.data.status          
+            return status
 
-      - name: Set up environment
-        run: echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> $GITHUB_ENV
+      - name: Setup env
+        run: echo "STATUS=${{ steps.api-check.outputs.result }}" >> $GITHUB_ENV
 
-      - name: Send GET request to API
-        id: api_request
+      - name: Determine message and mention
+        id: determine-msg
         run: |
-          API_RESPONSE='{"appName":"LightCode-Backend","services":[{"message":"LightCode DB","status":"Alive"}],"status":"Alive"}'
-          echo "API_RESPONSE=${API_RESPONSE}" >> $GITHUB_ENV
-
-      - name: Check API response status
-        run: |
-          STATUS=$(echo "${{ env.API_RESPONSE }}" | jq -r '.status')
-          echo "STATUS=${STATUS}" >> $GITHUB_ENV
-          if [ "$STATUS" = "Alive" ]; then
-            echo "Service is alive."
-            echo "SEND_DISCORD_MESSAGE=true" >> $GITHUB_ENV
-          else
-            echo "Service is not alive."
+          if [[ "${STATUS}" != "Alive" ]]; then
+            # Add your desired message 
+            echo "MENTION=<@&1157965476970909748>" >> $GITHUB_ENV
+            echo "MESSAGE=ALERT! Status is '${STATUS}'." >> $GITHUB_ENV
           fi
 
-      - name: Send Discord message on success
-        if: env.SEND_DISCORD_MESSAGE == 'true'
-        run: |
-          curl -X POST -H "Content-type: application/json" --data \
-            "{\"content\":\"Service status: ${{ env.STATUS }}\"}" \
-            ${{ env.DISCORD_WEBHOOK_URL }}
+      - steps:
+          - name: Send Discord message
+            if: env.MESSAGE
+            run: |
+              curl -X POST -H "Content-Type: application/json" \
+                -d '{"content": "'"${MESSAGE}"'"}' \
+                "https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }}"
