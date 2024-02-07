@@ -16,12 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - name: Determine message and mention
+        run: |
+          if [[ "${{ github.actor }}" == "huato112" ]]; then
+            mention="@bluebik"
+            message="${{ github.actor }} (${mention}) is deploying.."
+          elif [[ "${{ github.actor }}" == "tuskingcup" ]]; then
+            mention="@tuskungg"
+            message="${{ github.actor }} (${mention}) is deploying.."
+          else
+            mention=""
+            message="${{ github.actor }} (UNKNOWN_USER) is deploying."
+          fi
+
       - name: Send slack message
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.WEBHOOK_ID }}
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          args: ${{ github.actor }} is deploying.
+          args: ${{ steps.determine.outputs.message }}
+        env:
+          MENTION: ${{ steps.determine.outputs.mention }}
 
   deploy:
     runs-on: self-hosted
