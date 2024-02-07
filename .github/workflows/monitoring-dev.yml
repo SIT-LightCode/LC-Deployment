@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-api-status:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Check the API and set the status as env var
         id: api-check
@@ -29,16 +29,14 @@ jobs:
       - name: Determine message and mention
         id: determine-msg
         run: |
-          if [[ "${STATUS}" != "Alive" ]]; then
-            # Add your desired message 
-            echo "MENTION=<@&1157965476970909748>" >> $GITHUB_ENV
-            echo "MESSAGE=ALERT! Status is '${STATUS}'." >> $GITHUB_ENV
+          if [[ "${{ env.STATUS }}" != "Alive2" ]]; then
+            echo "MESSAGE=<@&1157965476970909748> ALERT! Status is '${{ env.STATUS }}'." >> $GITHUB_ENV
           fi
 
-      - steps:
-          - name: Send Discord message
-            if: env.MESSAGE
-            run: |
-              curl -X POST -H "Content-Type: application/json" \
-                -d '{"content": "'"${MESSAGE}"'"}' \
-                "https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }}"
+      - name: Send Discord message
+        if: env.MESSAGE
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "'"${{ env.MESSAGE }}"'"}' \
+            "<https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/}${{ secrets.WEBHOOK_TOKEN }}"
+.
