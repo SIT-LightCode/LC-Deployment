@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Determine message and mention
-        id: determine
         run: |
           if [[ "${{ github.actor }}" == "huato112" ]]; then
             mention="<@!241526471611514881>"
@@ -28,17 +27,14 @@ jobs:
             mention="<@&1157965476970909748>"
             message="${mention} Please check Gitlab_User: ${{ github.actor }} is deploying."
           fi
-          echo "MENTION=${mention}" >> $GITHUB_ENV
-          echo "MESSAGE=${message}" >> $GITHUB_ENV
+          export MENTION="${mention}"
+          export MESSAGE="${message}"
 
       - name: Send Discord message
-        uses: appleboy/discord-action@master
-        with:
-          webhook_id: ${{ secrets.WEBHOOK_ID }}
-          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          args: ${{ env.MESSAGE }}
-        env:
-          MENTION: ${{ env.MENTION }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "'"${MESSAGE}"'"}' \
+            "https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }}"
 
   deploy:
     runs-on: self-hosted
