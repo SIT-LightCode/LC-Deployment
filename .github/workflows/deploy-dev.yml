@@ -28,7 +28,8 @@ jobs:
             mention=""
             message="${{ github.actor }} (UNKNOWN_USER) is deploying."
           fi
-
+          echo "::set-output name=mention::${mention}"
+          echo "::set-output name=message::${message}"
       - name: Send slack message
         uses: appleboy/discord-action@master
         with:
