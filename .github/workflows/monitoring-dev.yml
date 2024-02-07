@@ -2,7 +2,7 @@ name: Check Service Status
 
 on:
   schedule:
-    - cron: "*/1 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   check_service_status:
