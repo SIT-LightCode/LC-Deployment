@@ -19,14 +19,14 @@ jobs:
         id: determine
         run: |
           if [[ "${{ github.actor }}" == "huato112" ]]; then
-            mention="<@&241526471611514881>"
+            mention="<@!241526471611514881>"
             message="huato112 (${mention}) is deploying.."
           elif [[ "${{ github.actor }}" == "tuskingcup" ]]; then
-            mention="<@&381328982420881449>"
+            mention="<@!381328982420881449>"
             message="tuskingcup (${mention}) is deploying.."
           else
-            mention=""
-            message="${{ github.actor }} (UNKNOWN_USER) is deploying."
+            mention="<@&1157965476970909748>"
+            message="${mention} Please check Gitlab_User: ${{ github.actor }} is deploying."
           fi
           echo "MENTION=${mention}" >> $GITHUB_ENV
           echo "MESSAGE=${message}" >> $GITHUB_ENV
