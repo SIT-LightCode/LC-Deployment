@@ -13,10 +13,6 @@ jobs:
   check-api-status:
     runs-on: self-hosted
     steps:
-      - name: Install prerequisites
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
       - name: Check the API and set status as env var
         id: api-check
         run: |
