@@ -18,19 +18,9 @@ jobs:
       - uses: actions/checkout@master
       - name: Send Discord message
         run: |
-          if [ "${{ github.actor }}" = "huato112" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"content": "huato112 (<@!241526471611514881>) is deploying.."}' \
-              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
-          elif [ "${{ github.actor }}" = "tuskingcup" ]; then
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"content": "tuskingcup (<@!381328982420881449>) is deploying.."}' \
-              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
-          else
-            curl -X POST -H "Content-Type: application/json" \
-              -d '{"content": "<@&1157965476970909748> Please check Gitlab_User: ${{ github.actor }} is deploying."}' \
-              https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
-          fi
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "<@&1157965476970909748> Please check Gitlab_User: ${{ github.actor }} is deploying."}' \
+            https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_PROD }}/${{ secrets.WEBHOOK_TOKEN_PROD }}
 
   deploy:
     runs-on: self-hosted
