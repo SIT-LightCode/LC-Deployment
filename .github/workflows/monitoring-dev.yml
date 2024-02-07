@@ -1,13 +1,13 @@
 name: Check Service Status
 
-# on:
-#   schedule:
-#     - cron: "*/5 * * * *"
-
 on:
-  push:
-    branches:
-      - main # Change 'main' to the branch you want to trigger the workflow on
+  schedule:
+    - cron: "*/5 * * * *"
+
+# on:
+#   push:
+#     branches:
+#       - main
 
 jobs:
   check-api-status:
@@ -22,7 +22,7 @@ jobs:
       - name: Determine message and mention
         id: determine-msg
         run: |
-          if [[ "${{ env.STATUS }}" != "Alive2" ]]; then
+          if [[ "${{ env.STATUS }}" != "Alive" ]]; then
             echo "MESSAGE=<@&1157965476970909748> ALERT! Status is '${{ env.STATUS }}'." >> $GITHUB_ENV
           fi
 
