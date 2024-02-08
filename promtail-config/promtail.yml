@@ -9,7 +9,7 @@ positions:
 
 # Loki Server URL
 clients:
-  - url: http://localhost:3100/loki/api/v1/push
+  - url: http://lightcodemon.sit.kmutt.ac.th:3100/loki/api/v1/push
 
 scrape_configs:
   - job_name: syslog
