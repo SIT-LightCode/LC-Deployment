@@ -20,3 +20,10 @@ scrape_configs:
           job: syslog
           host: localhost
           __path__: /var/log/syslog
+  - job_name: spring-boot-app
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: spring-boot-app
+          __path__: /springboot/*.log
