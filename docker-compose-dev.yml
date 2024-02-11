@@ -100,7 +100,14 @@ services:
     container_name: node-exporter
     ports:
       - '9100:9100'
-
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    volumes:
+      - ./promtail-config:/etc/promtail
+      - /var/log:/var/log
+      - ../log:/springboot
+    command: -config.file=/etc/promtail/promtail.yml
 networks:
   lc-net:
     driver: bridge
