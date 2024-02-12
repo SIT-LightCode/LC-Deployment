@@ -43,7 +43,7 @@ jobs:
       - name: Check the API and set status as env var
         id: api-check
         run: |
-          RESPONSE=$(curl -s 'https://capstone23.sit.kmutt.ac.th/us1/api/v1/details' | jq -r .status)
+          RESPONSE=$(curl -sk 'https://capstone23.sit.kmutt.ac.th/us1/api/v1/details' | jq -r .status)
           if [ -z "${RESPONSE}" ]; then
             echo "STATUS=DEAD" >> $GITHUB_ENV
           else
