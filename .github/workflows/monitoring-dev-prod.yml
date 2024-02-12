@@ -38,12 +38,12 @@ jobs:
             https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_MONITOR_DEV }}/${{ secrets.WEBHOOK_TOKEN_MONITOR_DEV }}
 
   check-api-status-prod:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Check the API and set status as env var
         id: api-check
         run: |
-          RESPONSE=$(curl -s 'http://cp23us1.sit.kmutt.ac.th/api/v1/details' | jq -r .status)
+          RESPONSE=$(curl -s 'https://capstone23.sit.kmutt.ac.th/us1/api/v1/details' | jq -r .status)
           if [ -z "${RESPONSE}" ]; then
             echo "STATUS=DEAD" >> $GITHUB_ENV
           else
