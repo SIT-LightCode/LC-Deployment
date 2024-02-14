@@ -17,6 +17,7 @@ services:
   db:
     image: mysql:8.1
     container_name: db
+    restart: always
     env_file:
       - mysql.env
     ports:
@@ -85,29 +86,12 @@ services:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
       - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-  filebeat:
-    build:
-      context: filebeat/
-    container_name: filebeat
-    command: filebeat -e -d filebeat.yml -d "publish"
-    volumes:
-      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ../log:/usr/share/filebeat/logs
-
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
+    restart: always
     ports:
       - '9100:9100'
-  promtail:
-    image: grafana/promtail:2.9.4
-    container_name: promtail
-    volumes:
-      - ./promtail-config:/etc/promtail
-      - /var/log:/var/log
-      - ../log:/springboot
-    command: -config.file=/etc/promtail/promtail.yml
 networks:
   lc-net:
     driver: bridge
