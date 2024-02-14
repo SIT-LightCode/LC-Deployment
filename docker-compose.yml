@@ -91,7 +91,7 @@ services:
     container_name: promtail
     restart: always
     volumes:
-      - ./promtail-config:/etc/promtail
+      - ./promtail-config/prod:/etc/promtail
       - /var/log:/var/log
       - ../log:/springboot
     command: -config.file=/etc/promtail/promtail.yml
