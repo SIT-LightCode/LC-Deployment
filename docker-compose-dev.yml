@@ -100,7 +100,7 @@ services:
     volumes:
       - ./promtail-config/dev:/etc/promtail
       - /var/log:/var/log
-      - ../log:/springboot
+      - ../log/lc_backend_log.log:/springboot/lc_backend_log_dev.log
     command: -config.file=/etc/promtail/promtail.yml
 networks:
   lc-net:
