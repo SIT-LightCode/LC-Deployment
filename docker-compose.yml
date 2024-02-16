@@ -19,6 +19,7 @@ services:
   db:
     image: mysql:8.1
     container_name: db
+    restart: always
     env_file:
       - mysql.env
     volumes:
@@ -35,6 +36,8 @@ services:
     container_name: back
     image: ghcr.io/sit-lightcode/back-end:stable
     restart: on-failure
+    volumes:
+      - "../log:/logs"
     depends_on:
       - db
     env_file:
@@ -82,8 +85,18 @@ services:
   node-exporter:
     image: prom/node-exporter:v1.7.0
     container_name: node-exporter
+    restart: always
     ports:
       - '9100:9100'
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    restart: always
+    volumes:
+      - ./promtail-config/prod:/etc/promtail
+      - /var/log:/var/log
+      - ../log:/springboot
+    command: -config.file=/etc/promtail/promtail.yml
 
 networks:
   lc-net:
