@@ -49,6 +49,7 @@ services:
       DB_HOST: db
       DB_PORT: 3306
       NODEX: nodex
+      ENV_LOG: "prod"
     networks:
       - lc-net
       - db-net
