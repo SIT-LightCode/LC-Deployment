@@ -26,7 +26,7 @@ jobs:
       - name: Determine message and mention
         id: determine-msg
         run: |
-          if [[ "${{ env.STATUS }}" != "Alive" ]]; then
+          if [[ "${{ env.STATUS }}" != "ALIVE" ]]; then
             echo "MESSAGE=(DEV) <@&1157965476970909748> ALERT! Status is '${{ env.STATUS }}'." >> $GITHUB_ENV
           fi
 
