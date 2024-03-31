@@ -13,11 +13,11 @@ on:
       frontend_tag:
         description: "tag version for frontend default tag is dev"
         required: true
-        default: "dev"
+        default: "stable"
       backend_tag:
         description: "tag version for backend default tag is dev"
         required: true
-        default: "dev"
+        default: "stable"
 jobs:
   discord_noti_:
     name: noti_workflow_start
