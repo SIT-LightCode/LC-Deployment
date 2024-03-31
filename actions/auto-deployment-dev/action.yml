@@ -61,6 +61,8 @@ runs:
           export MYSQL_DATABASE=$MYSQL_DATABASE
           export MYSQL_USER=$MYSQL_USER
           export MYSQL_PASSWORD=$MYSQL_PASSWORD
+          export FRONTEND_TAG="dev"
+          export BACKEND_TAG="dev"
 
           docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
           
@@ -100,6 +102,14 @@ runs:
             echo "backend.env does not exist."
           fi
           envsubst < backend.env.tmpl > backend.env
+
+          if [[ -f "frontend.env" ]]
+          then
+            rm -rf frontend.env
+          else
+            echo "frontend.env does not exist."
+          fi
+          envsubst < frontend.env.tmpl > frontend.env
           
           git pull
           docker-compose -f docker-compose-dev.yml pull
