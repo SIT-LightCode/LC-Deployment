@@ -60,7 +60,7 @@ jobs:
           MYSQL_USER: ${{secrets.MYSQL_USER}}
           MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
           RESTART: ${{inputs.restart}}
-          FRONT_TAG: ${{inputs.frontend_tag}}
+          FRONTEND_TAG: ${{inputs.frontend_tag}}
           BACKEND_TAG: ${{inputs.backend_tag}}
         run: |
           yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
