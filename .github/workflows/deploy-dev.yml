@@ -68,7 +68,7 @@ jobs:
             export MYSQL_DATABASE=$MYSQL_DATABASE
             export MYSQL_USER=$MYSQL_USER
             export MYSQL_PASSWORD=$MYSQL_PASSWORD
-            export FRONT_TAG=$FRONT_TAG
+            export FRONTEND_TAG=$FRONTEND_TAG
             export BACKEND_TAG=$BACKEND_TAG
 
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
