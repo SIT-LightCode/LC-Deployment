@@ -10,6 +10,15 @@ on:
         options:
           - "yes"
           - "no"
+      frontend_tag:
+        description: "tag version for frontend default tag is dev"
+        required: true
+        default: "dev"
+      backend_tag:
+        description: "tag version for backend default tag is dev"
+        required: true
+        default: "dev"
+
 jobs:
   discord_noti:
     name: deploy noti
@@ -51,12 +60,16 @@ jobs:
           MYSQL_USER: ${{secrets.MYSQL_USER}}
           MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
           RESTART: ${{inputs.restart}}
+          FRONT_TAG: ${{inputs.frontend_tag}}
+          BACKEND_TAG: ${{inputs.backend_tag}}
         run: |
           yes | sshpass -p $DEV_PWD ssh -tt -o StrictHostKeyChecking=no $DEV_ADMIN@$DEV_HOSTNAME << EOF
             export MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
             export MYSQL_DATABASE=$MYSQL_DATABASE
             export MYSQL_USER=$MYSQL_USER
             export MYSQL_PASSWORD=$MYSQL_PASSWORD
+            export FRONT_TAG=$FRONT_TAG
+            export BACKEND_TAG=$BACKEND_TAG
 
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
             
@@ -92,6 +105,14 @@ jobs:
               echo "backend.env does not exist."
             fi
             envsubst < backend.env.tmpl > backend.env
+
+            if [[ -f "frontend.env" ]]
+            then
+              rm -rf frontend.env
+            else
+              echo "frontend.env does not exist."
+            fi
+            envsubst < frontend.env.tmpl > frontend.env.env
             
             git pull
             docker-compose -f docker-compose-dev.yml pull
