@@ -34,7 +34,7 @@ services:
 
   back:
     container_name: back
-    image: ghcr.io/sit-lightcode/back-end:stable
+    image: "ghcr.io/sit-lightcode/back-end:${BACKEND_TAG}"
     restart: on-failure
     volumes:
       - "../log:/logs"
@@ -57,7 +57,7 @@ services:
       
   front:
     container_name: front
-    image: ghcr.io/sit-lightcode/front-end:stable
+    image: "ghcr.io/sit-lightcode/front-end:${FRONTEND_TAG}"
     restart: on-failure
     depends_on:
       - back
