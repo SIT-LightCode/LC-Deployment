@@ -69,8 +69,6 @@ services:
     container_name: front
     image: "ghcr.io/sit-lightcode/front-end:${FRONTEND_TAG}"
     restart: on-failure
-    env_file:
-      - frontend.env
     ports:
       - 3000:80
     depends_on:
