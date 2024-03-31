@@ -11,11 +11,11 @@ on:
           - "yes"
           - "no"
       frontend_tag:
-        description: "tag version for frontend default tag is dev"
+        description: "tag version for frontend default is stable"
         required: true
         default: "stable"
       backend_tag:
-        description: "tag version for backend default tag is dev"
+        description: "tag version for backend default is stable"
         required: true
         default: "stable"
 jobs:
