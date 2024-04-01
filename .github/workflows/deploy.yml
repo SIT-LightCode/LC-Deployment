@@ -98,7 +98,7 @@ jobs:
             else
               echo "frontend.env does not exist."
             fi
-            envsubst < frontend.env.tmpl > frontend.env.env
+            envsubst < frontend.env.tmpl > frontend.env
             
             git pull
             docker-compose pull
