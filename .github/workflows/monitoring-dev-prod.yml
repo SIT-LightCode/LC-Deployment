@@ -59,7 +59,7 @@ jobs:
 
   #     - name: Send Discord message
   #       if: env.MESSAGE
-        run: |
-          curl -X POST -H "Content-Type: application/json" \
-            -d '{"content": "'"${{ env.MESSAGE }}"'"}' \
-            https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_MONITOR_DEV }}/${{ secrets.WEBHOOK_TOKEN_MONITOR_DEV }}
+  #       run: |
+  #         curl -X POST -H "Content-Type: application/json" \
+  #           -d '{"content": "'"${{ env.MESSAGE }}"'"}' \
+  #           https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_MONITOR_DEV }}/${{ secrets.WEBHOOK_TOKEN_MONITOR_DEV }}
