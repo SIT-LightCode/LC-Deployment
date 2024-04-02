@@ -37,28 +37,28 @@ jobs:
             -d '{"content": "'"${{ env.MESSAGE }}"'"}' \
             https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_MONITOR_DEV }}/${{ secrets.WEBHOOK_TOKEN_MONITOR_DEV }}
 
-  check-api-status-prod:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check the API and set status as env var
-        id: api-check
-        run: |
-          RESPONSE=$(curl -sk 'https://capstone23.sit.kmutt.ac.th/us1/api/v1/details' | jq -r .status)
-          if [ -z "${RESPONSE}" ]; then
-            echo "STATUS=DEAD" >> $GITHUB_ENV
-          else
-            echo "STATUS=${RESPONSE}" >> $GITHUB_ENV
-          fi
+  # check-api-status-prod:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check the API and set status as env var
+  #       id: api-check
+  #       run: |
+  #         RESPONSE=$(curl -sk 'https://capstone23.sit.kmutt.ac.th/us1/api/v1/details' | jq -r .status)
+  #         if [ -z "${RESPONSE}" ]; then
+  #           echo "STATUS=DEAD" >> $GITHUB_ENV
+  #         else
+  #           echo "STATUS=${RESPONSE}" >> $GITHUB_ENV
+  #         fi
 
-      - name: Determine message and mention
-        id: determine-msg
-        run: |
-          if [[ "${{ env.STATUS }}" != "ALIVE" ]]; then
-            echo "MESSAGE=(PROD) <@&1157965476970909748> ALERT! Status is '${{ env.STATUS }}'." >> $GITHUB_ENV
-          fi
+  #     - name: Determine message and mention
+  #       id: determine-msg
+  #       run: |
+  #         if [[ "${{ env.STATUS }}" != "ALIVE" ]]; then
+  #           echo "MESSAGE=(PROD) <@&1157965476970909748> ALERT! Status is '${{ env.STATUS }}'." >> $GITHUB_ENV
+  #         fi
 
-      - name: Send Discord message
-        if: env.MESSAGE
+  #     - name: Send Discord message
+  #       if: env.MESSAGE
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d '{"content": "'"${{ env.MESSAGE }}"'"}' \
