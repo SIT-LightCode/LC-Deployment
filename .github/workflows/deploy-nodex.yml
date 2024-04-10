@@ -30,7 +30,7 @@ jobs:
             then
               echo "lc-js-compiler exists."
             else
-              yes | git clone git@github.com:SIT-LightCode/lc-js-compiler.git
+              echo "yes" | git clone git@github.com:SIT-LightCode/lc-js-compiler.git
             fi          
 
             cd ~/lc-js-compiler
