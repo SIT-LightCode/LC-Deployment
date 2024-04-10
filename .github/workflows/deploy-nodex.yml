@@ -1,0 +1,52 @@
+name: "deploy nodex"
+on:
+  workflow_dispatch:
+    inputs:
+      restart:
+        description: "down service before up again"
+        required: true
+        default: "no"
+        type: choice
+        options:
+          - "yes"
+          - "no"
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: SSH into the Server and Run docker-compose
+        env:
+          DEV_PWD: ${{ secrets.NODEX_PWD }}
+          DEV_ADMIN: ${{ secrets.NODEX_ADMIN }}
+          DEV_HOSTNAME: ${{ secrets.NODEX_HOSTNAME }}
+          TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          RESTART: ${{inputs.restart}}
+
+        run: |
+          yes | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
+
+            docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
+            
+            if [[ -f "lc-js-compiler" ]]
+            then
+              echo "lc-js-compiler exists."
+            else
+              yes | git clone git@github.com:SIT-LightCode/lc-js-compiler.git
+            fi          
+
+            cd ~/lc-js-compiler
+
+            if [[ $RESTART = "yes" ]]
+            then
+              docker-compose down
+            fi
+            
+            git pull
+            docker-compose -f docker-compose-dev.yml pull
+            docker-compose -f docker-compose-dev.yml up -d --build
+            echo y | docker system prune -a
+            exit
+          EOF
