@@ -26,10 +26,6 @@ jobs:
           RESTART: ${{inputs.restart}}
 
         run: |
-          yes | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
-
-            docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
-            
             if [[ -f "lc-js-compiler" ]]
             then
               echo "lc-js-compiler exists."
@@ -48,5 +44,3 @@ jobs:
             docker-compose -f docker-compose-dev.yml pull
             docker-compose -f docker-compose-dev.yml up -d --build
             echo y | docker system prune -a
-            exit
-          EOF
