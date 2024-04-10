@@ -26,6 +26,7 @@ jobs:
           RESTART: ${{inputs.restart}}
 
         run: |
+            docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
             if [[ -f "lc-js-compiler" ]]
             then
               echo "lc-js-compiler exists."
