@@ -27,14 +27,14 @@ jobs:
 
         run: |
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
-            if [[ -f "lc-js-compiler" ]]
+            if [[ -f "LC-Deployment" ]]
             then
-              echo "lc-js-compiler exists."
+              echo "LC-Deployment exists."
             else
-              echo "yes" | git clone git@github.com:SIT-LightCode/lc-js-compiler.git
+              echo "yes" | git clone git@github.com:SIT-LightCode/LC-Deployment.git
             fi          
 
-            cd ~/lc-js-compiler
+            cd ~/LC-Deployment
 
             if [[ $RESTART = "yes" ]]
             then
@@ -42,6 +42,4 @@ jobs:
             fi
             
             git pull
-            docker-compose -f docker-compose-dev.yml pull
-            docker-compose -f docker-compose-dev.yml up -d --build
             echo y | docker system prune -a
