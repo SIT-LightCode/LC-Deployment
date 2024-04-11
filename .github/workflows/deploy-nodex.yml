@@ -29,11 +29,6 @@ jobs:
         run: |
           echo "yes" | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
-            eval "$(ssh-agent -s)"
-            ls
-            pwd
-            hostname
-            ssh-add $NODEX_PRIVATE_KEY
             if [[ -f "LC-Deployment" ]]
             then
               echo "LC-Deployment exists."

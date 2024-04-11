@@ -1,0 +1,28 @@
+version: '3.1'
+services:  
+  nodex:
+    container_name: nodex
+    image: ghcr.io/sit-lightcode/nodex:stable
+    restart: on-failure
+    ports:
+      - 8000:8000
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: cadvisor
+    restart: always
+    ports:
+      - "9000:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: node-exporter
+    restart: always
+    ports:
+      - '9100:9100'
+
