@@ -59,7 +59,7 @@ services:
       DB_PASS: ${MYSQL_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
-      NODEX: nodex
+      NODEX: "lightcodepoc.sit.kmutt.ac.th:8000"
       ENV_LOG: "dev"
     networks:
       - lc-net
