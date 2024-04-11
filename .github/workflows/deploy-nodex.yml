@@ -18,16 +18,15 @@ jobs:
       - uses: actions/checkout@v2
       - name: SSH into the Server and Run docker-compose
         env:
-          DEV_PWD: ${{ secrets.NODEX_PWD }}
-          DEV_ADMIN: ${{ secrets.NODEX_ADMIN }}
-          DEV_HOSTNAME: ${{ secrets.NODEX_HOSTNAME }}
+          NODEX_PWD: ${{ secrets.NODEX_PWD }}
+          NODEX_ADMIN: ${{ secrets.NODEX_ADMIN }}
+          NODEX_HOSTNAME: ${{ secrets.NODEX_HOSTNAME }}
           TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           RESTART: ${{inputs.restart}}
 
         run: |
           yes | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
-            hostname
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
             if [[ -f "LC-Deployment" ]]
             then
