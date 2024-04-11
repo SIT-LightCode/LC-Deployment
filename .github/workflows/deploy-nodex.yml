@@ -26,6 +26,8 @@ jobs:
           RESTART: ${{inputs.restart}}
 
         run: |
+          yes | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
+            hostname
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
             if [[ -f "LC-Deployment" ]]
             then
@@ -43,3 +45,5 @@ jobs:
             
             git pull
             echo y | docker system prune -a
+            exit
+          EOF
