@@ -21,14 +21,16 @@ jobs:
           NODEX_PWD: ${{ secrets.NODEX_PWD }}
           NODEX_ADMIN: ${{ secrets.NODEX_ADMIN }}
           NODEX_HOSTNAME: ${{ secrets.NODEX_HOSTNAME }}
+          NODEX_PRIVATE_KEY: ${{ secrets.NODEX_PRIVATE_KEY }}
           TUS_GH_USER: ${{ secrets.TUS_GH_USER }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           RESTART: ${{inputs.restart}}
 
         run: |
-          yes | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
+          echo "yes" | sshpass -p $NODEX_PWD ssh -tt -o StrictHostKeyChecking=no $NODEX_ADMIN@$NODEX_HOSTNAME << EOF
             docker login ghcr.io -u $TUS_GH_USER -p $GHCR_PAT
-            whoami
+            eval "$(ssh-agent -s)"
+            ssh-add $NODEX_PRIVATE_KEY
             if [[ -f "LC-Deployment" ]]
             then
               echo "LC-Deployment exists."
