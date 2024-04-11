@@ -31,14 +31,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - db-net
-  nodex:
-    container_name: nodex
-    image: ghcr.io/sit-lightcode/nodex:dev
-    restart: on-failure
-    ports:
-      - 8000:8000
-    networks:
-      - ex-net
 
   back:
     container_name: back
@@ -64,7 +56,6 @@ services:
     networks:
       - lc-net
       - db-net
-      - ex-net
   front:
     container_name: front
     image: "ghcr.io/sit-lightcode/front-end:${FRONTEND_TAG}"
@@ -110,5 +101,4 @@ networks:
     driver: bridge
   db-net:
     driver: bridge
-  ex-net:
-    driver: bridge
+
