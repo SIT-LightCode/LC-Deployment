@@ -43,6 +43,8 @@ jobs:
             fi
             
             git pull
+            docker-compose -f docker-compose-nodex.yml pull
+            docker-compose -f docker-compose-nodex.yml up -d
             echo y | docker system prune -a
             exit
           EOF
