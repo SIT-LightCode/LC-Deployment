@@ -38,7 +38,7 @@ jobs:
             https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID_MONITOR_DEV }}/${{ secrets.WEBHOOK_TOKEN_MONITOR_DEV }}
 
   check-api-status-prod:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Check the API and set status as env var
         id: api-check
